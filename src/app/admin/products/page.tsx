@@ -6,14 +6,13 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components
 export default function AdminProductpage() {
     return (
         <>
-            <div className="flex justify-center items-center gap-4">
+            <div className="flex justify-between items-center gap-4">
                 <PageHeader>Products</PageHeader>
                 <Button>
-                    <Link href='/admin/products/new'></Link>
-
+                    <Link href='/admin/products/new'>Add Product</Link>
                 </Button>
-
             </div>
+            <ProductsTable />
         </>
     )
 }
