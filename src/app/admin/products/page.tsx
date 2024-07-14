@@ -3,7 +3,9 @@ import { PageHeader } from "../_components/PageHeader";
 import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import db from "@/app/db/db";
-import { CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, MoreVertical, XCircle } from "lucide-react";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function AdminProductpage() {
     return (
@@ -64,6 +66,25 @@ async function ProductsTable() {
                                     <XCircle />
                                 </>
                             )}
+                        </TableCell>
+                        <TableCell>{product.name}</TableCell>
+                        <TableCell>{formatCurrency(product.priceInCents / 100)}</TableCell>
+                        <TableCell>{formatNumber(product._count.orders)}</TableCell>
+                        <TableCell>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>
+                                    <MoreVertical />
+                                    <span className="sr-only">Actions</span>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem asChild>
+                                        <a download href={`/admin/products/${product.id}/download`}>Download</a>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link href={`/admin/products/${product.id}/download`}>Edit</Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </TableCell>
                     </TableRow>
                 ))}
