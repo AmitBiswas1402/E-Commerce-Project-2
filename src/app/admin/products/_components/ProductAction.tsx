@@ -1,15 +1,46 @@
-import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { startTransition } from "react";
+'use client'
 
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
+import { useTransition } from "react";
+import { deleteProduct, toggleProductAvailability } from "../../_actions/product";
+import { useRouter } from "next/router";
 
 export function ActiveToggleDropdownItem({id, isAvailableForPurchase}: {id: string, isAvailableForPurchase: boolean}) {
-    return <DropdownMenuItem onClick={() => {
-        startTransition
-    }}>
-        
-    </DropdownMenuItem>
+    const [isPending, startTransition] = useTransition()
+
+    return (
+        <DropdownMenuItem 
+            disabled={isPending}
+            onClick={() => {
+            startTransition(async() => {
+                await toggleProductAvailability(id, !isAvailableForPurchase)
+            })
+        }}>
+            {isAvailableForPurchase ? "Deactivate" : "Activate"}
+            
+        </DropdownMenuItem>
+    )
 }
 
-export function DeleteDropdownItem() {
-
-}
+export function DeleteDropdownItem({
+    id,
+    disabled,
+  }: {
+    id: string
+    disabled: boolean
+  }) {
+    const [isPending, startTransition] = useTransition()
+    const router = useRouter()
+    return (
+      <DropdownMenuItem
+        disabled={disabled || isPending}
+        onClick={() => {
+          startTransition(async () => {
+            await deleteProduct(id)
+          })
+        }}
+      >
+        Delete
+      </DropdownMenuItem>
+    )
+  }
